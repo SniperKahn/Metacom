@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Screen App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+
+        input {
+            margin: 5px;
+            padding: 8px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="screenTitle">Home Screen</h1>
+
+    <input type="text" id="nameInput" placeholder="Enter name">
+    <input type="text" id="distanceInput" placeholder="Enter distance">
+
+    <button onclick="showAddNameScreen()">Add Name</button>
+    <button onclick="showDistancesScreen()">Show Distances</button>
+    <button onclick="showCompetitionScreen()">Competition Mode</button>
+
+    <script>
+        // Data storage
+        var names = [];
+        var distances = [];
+
+        function showAddNameScreen() {
+            document.getElementById('screenTitle').innerText = 'Add Name Screen';
+            clearInputs();
+            addButton('Save Name', saveName);
+            addButton('Delete Name', deleteName);
+            addButton('Home', showHomeScreen);
+        }
+
+        function showDistancesScreen() {
+            document.getElementById('screenTitle').innerText = 'Distances Screen';
+            clearInputs();
+            addButton('Add Distance', addDistance);
+            addButton('Remove Distance', removeDistance);
+            addButton('Home', showHomeScreen);
+        }
+
+        function showCompetitionScreen() {
+            document.getElementById('screenTitle').innerText = 'Competition Screen';
+            clearInputs();
+            sortDistances(); // Sort distances for competition mode
+            addButton('Show Competition', showCompetition);
+            addButton('Home', showHomeScreen);
+        }
+
+        function showHomeScreen() {
+            document.getElementById('screenTitle').innerText = 'Home Screen';
+            clearInputs();
+            addButton('Add Name', showAddNameScreen);
+            addButton('Show Distances', showDistancesScreen);
+            addButton('Competition Mode', showCompetitionScreen);
+        }
+
+        function addButton(text, clickHandler) {
+            var button = document.createElement('button');
+            button.innerText = text;
+            button.onclick = clickHandler;
+            document.body.appendChild(button);
+        }
+
+        function clearInputs() {
+            document.getElementById('nameInput').value = '';
+            document.getElementById('distanceInput').value = '';
+        }
+
+        function saveName() {
+            var name = document.getElementById('nameInput').value;
+            names.push(name);
+            alert('Name saved: ' + name);
+        }
+
+        function deleteName() {
+            var name = document.getElementById('nameInput').value;
+            var index = names.indexOf(name);
+            if (index !== -1) {
+                names.splice(index, 1);
+                alert('Name deleted: ' + name);
+            } else {
+                alert('Name not found: ' + name);
+            }
+        }
+
+        function addDistance() {
+            var distance = parseFloat(document.getElementById('distanceInput').value);
+            if (!isNaN(distance)) {
+                distances.push(distance);
+                alert('Distance added: ' + distance);
+            } else {
+                alert('Invalid distance input');
+            }
+        }
+
+        function removeDistance() {
+            var distance = parseFloat(document.getElementById('distanceInput').value);
+            var index = distances.indexOf(distance);
+            if (!isNaN(distance) && index !== -1) {
+                distances.splice(index, 1);
+                alert('Distance removed: ' + distance);
+            } else {
+                alert('Distance not found: ' + distance);
+            }
+        }
+
+        function sortDistances() {
+            distances.sort(function(a, b) {
+                return a - b;
+            });
+        }
+
+        function showCompetition() {
+            var result = 'Competition Mode\n';
+            for (var i = 0; i < names.length; i++) {
+                result += names[i] + ': ' + distances[i] + '\n';
+            }
+            alert(result);
+        }
+    </script>
+</body>
+</html>
+
+
